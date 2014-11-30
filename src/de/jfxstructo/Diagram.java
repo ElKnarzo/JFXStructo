@@ -2,7 +2,10 @@ package de.jfxstructo;
 
 import java.util.Stack;
 
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import de.jfxstructo.elements.Element;
@@ -11,34 +14,45 @@ import de.jfxstructo.elements.Subqueue;
 import de.jfxstructo.graphics.Frame;
 
 public class Diagram {
-	
+
 	private Stack<Element> redo = new Stack<Element>();
 	private Stack<Element> undo = new Stack<Element>();
-	
+
 	private static boolean isCut = false;
-	
+
 	private Element root = new Root();
 	private Element selected;
 	private static Element copied = null;
-	
-	private Pane pane;
-	
-	private Canvas canvas = new Canvas();
-    private Board board = new Board(canvas.getGraphicsContext2D());
-	
+
+	private final Pane pane;
+
+	private final Canvas canvas = new Canvas();
+    private final Board board = new Board(canvas.getGraphicsContext2D());
+
     public Diagram(Pane pane)  {
     	this.pane = pane;
-    	repaint();		
+
+    	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				System.out.println("Key Pressed: " + event.getCode());
+				if(event.getCode() == KeyCode.DELETE && selected != null) {
+					removeElement();
+				}
+			}
+		});
+    	repaint();
     }
-	
+
 	public Canvas getCanvas() {
 		return canvas;
 	}
-	
+
 	public Element getSelectedElement() {
 		return selected;
 	}
-	
+
 	public Element getRoot() {
 		return root;
 	}
@@ -53,25 +67,25 @@ public class Diagram {
 			board.drawRect(selected.getFrame(), Color.AQUA);
 		}
 	}
-	
+
 	public void repaint() {
-			Frame f = root.prepareDraw(board);  
+			Frame f = root.prepareDraw(board);
 	    	System.out.println(f);
 	//    	int d = Math.max(f.getWidth(), f.getHeight());
-	    	
+
 	    	canvas.setWidth(f.getWidth()+2);
 			canvas.setHeight(f.getHeight()+2);
-					
+
 			this.pane.setPrefHeight(f.getHeight()+2);
 			this.pane.setPrefWidth(f.getWidth()+2);
-	
+
 			root.draw(board, f);
 		}
 
 	public void undo() {
 		if (undo.size() > 0) {
 			redo.add(root.clone());
-			
+
 			root = undo.pop();
 			repaint();
 		}
@@ -80,12 +94,12 @@ public class Diagram {
 	public void redo() {
 		if (redo.size() > 0) {
 			undo.add(root.clone());
-			
+
 			root = redo.pop();
 			repaint();
 		}
 	}
-	
+
 	public boolean canUndo() {
 		return (undo.size() > 0);
 	}
@@ -93,12 +107,12 @@ public class Diagram {
 	public boolean canRedo() {
 		return (redo.size() > 0);
 	}
-	
+
 	public void addUndo() {
 		undo.add(root.clone());
 		clearRedo();
 	}
-	
+
 	public void clearRedo() {
 		redo = new Stack<>();
 	}
@@ -106,7 +120,7 @@ public class Diagram {
 	public void clearUndo() {
 		undo = new Stack<>();
 	}
-	
+
 	public void cut() {
 		if (selected != null) {
 			copied = selected.clone();
@@ -124,23 +138,23 @@ public class Diagram {
 		}
 		isCut = false;
 	}
-	
+
 	public void paste() {
 		if (selected != null && copied != null) {
 			addUndo();
-			
+
 			if(selected instanceof Subqueue) {
 				((Subqueue) selected).addElement(copied.clone());
 			} else {
 				((Subqueue) selected.getParent()).addElement(copied.clone());
-			}	
+			}
 			if(isCut) copied = null;
 			selected = null;
-			
+
 			repaint();
 		}
 	}
-	
+
 	public boolean canPaste() {
 		boolean cond = (copied != null && selected != null);
 		if (selected != null) {
@@ -148,7 +162,7 @@ public class Diagram {
 		}
 		return cond;
 	}
-	
+
 	public boolean canCopyCut() {
 		boolean cond = (selected != null);
 		if (selected != null) {
@@ -162,10 +176,10 @@ public class Diagram {
 		if(selected.getParent() != null && !(selected instanceof Subqueue)) {
 			addUndo();
 			((Subqueue) selected.getParent()).removeElement(selected);
-			
+
 			selected = null;
 			repaint();
 		}
 	}
-	
+
 }

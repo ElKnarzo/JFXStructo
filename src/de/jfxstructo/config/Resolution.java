@@ -3,8 +3,14 @@ package de.jfxstructo.config;
 import org.jdom2.Element;
 
 public class Resolution extends Config {
-	
+
 	private double width, height;
+
+	public Resolution() {
+		super(Resolution.class.getSimpleName().toLowerCase());
+		width = 1280;
+		height = 720;
+	}
 
 	public Resolution(Element el) {
 		super(el);
@@ -31,7 +37,7 @@ public class Resolution extends Config {
 		setWidth(width);
 		setHeight(height);
 	}
-	
+
 	@Override
 	public void setXMLElement(Element el) {
 		key = el.getName();
@@ -42,13 +48,13 @@ public class Resolution extends Config {
 	@Override
 	public Element getXMLElement() {
 		Element el = new Element(key);
-		
+
 		Element w = new Element("width");
 		w.setText(width+"");
-		
+
 		Element h = new Element("height");
 		h.setText(height+"");
-		
+
 		el.addContent(w);
 		el.addContent(h);
 		return el;

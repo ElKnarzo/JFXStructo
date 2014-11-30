@@ -13,8 +13,8 @@ import de.jfxstructo.Styler;
 public class PreferenceController extends JFXBaseController {
 
 	@FXML
-	private TabPane root;	
-	
+	private TabPane root;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);

@@ -2,8 +2,6 @@ package de.jfxstructo.gui.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -11,35 +9,40 @@ import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialogs;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import org.slf4j.LoggerFactory;
+
 import de.jfxstructo.Globals;
 import de.jfxstructo.Styler;
 import de.jfxstructo.config.Configuration;
 import de.jfxstructo.config.Resolution;
+import de.jfxstructo.gui.JFXStructo;
 
 public abstract class JFXBaseController implements Initializable {
 
 	protected URL location;
 	protected ResourceBundle resources;
-	
+
 	private static Resolution res = (Resolution) Configuration.getConfig("resolution");
-			
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.location = location;
 		this.resources = resources;
 	}
-	
+
 	protected void changeStylesheet(Stage stage, String... stylePath) {
 		stage.getScene().getStylesheets().clear();
 		for (String string : stylePath) {
 			stage.getScene().getStylesheets().add(getClass().getResource(string).toExternalForm());
 		}
 	}
-	
+
 	public static void initStage(final Stage stage, String systemPath, JFXBaseController controller, boolean isPrimary) {
-		
+
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setResources(Globals.getResourceBundle());
@@ -51,11 +54,11 @@ public abstract class JFXBaseController implements Initializable {
 			stage.setScene(new Scene(p));
 
 			Styler.loadStyle(stage);
-			
+
 			if (isPrimary) {
 				stage.setHeight(res.getHeight());
 				stage.setWidth(res.getWidth());
-				
+
 				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 					@Override
 					public void handle(WindowEvent arg0) {
@@ -64,11 +67,13 @@ public abstract class JFXBaseController implements Initializable {
 						System.exit(0);
 					}
 				});
+
 			}
-			
+
 		} catch (Exception ex) {
-	        Logger.getLogger(JFXBaseController.class.getName()).log(Level.SEVERE, null, ex);
-	    }
+			LoggerFactory.getLogger(JFXBaseController.class).error(null, ex);
+			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), null, null, null, ex);
+		}
 	}
 
 }
