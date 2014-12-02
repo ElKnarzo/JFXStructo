@@ -7,8 +7,8 @@ public abstract class Config {
 	protected String key;
 	protected Element el;
 
-	public Config(String key) {
-		this.key = key;
+	public Config() {
+		this.key = getClass().getSimpleName().toLowerCase();
 	}
 
 	public Config(Element el) {

@@ -8,6 +8,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.jfxstructo.elements.Element;
 import de.jfxstructo.elements.Root;
 import de.jfxstructo.elements.Subqueue;
@@ -36,7 +40,7 @@ public class Diagram {
 
 			@Override
 			public void handle(KeyEvent event) {
-				System.out.println("Key Pressed: " + event.getCode());
+				LoggerFactory.getLogger(Diagram.class).info("Key Pressed: " + event.getCode());
 				if(event.getCode() == KeyCode.DELETE && selected != null) {
 					removeElement();
 				}
@@ -59,19 +63,21 @@ public class Diagram {
 
 	public void selectElement(double x, double y) {
 		if(x <= canvas.getWidth() && y <= canvas.getHeight()) {
-			System.out.println("X:"+x + ", Y:" + y);
+			Logger logger = LoggerFactory.getLogger(Diagram.class);
+
+			logger.info("X:"+x + ", Y:" + y);
 			selected = root.selectElementByCoord(x, y);
-			System.out.println(selected);
-			System.out.println(selected.getFrame());
-			System.out.println("Height: "+selected.getHeight()+", Width: "+selected.getWidth());
+			logger.info(selected.toString());
+			logger.info(selected.getFrame().toString());
+			logger.info("Height: "+selected.getHeight()+", Width: "+selected.getWidth());
 			board.drawRect(selected.getFrame(), Color.AQUA);
 		}
 	}
 
 	public void repaint() {
 			Frame f = root.prepareDraw(board);
-	    	System.out.println(f);
-	//    	int d = Math.max(f.getWidth(), f.getHeight());
+			LoggerFactory.getLogger(Diagram.class).debug(f.toString());
+//			int d = Math.max(f.getWidth(), f.getHeight());
 
 	    	canvas.setWidth(f.getWidth()+2);
 			canvas.setHeight(f.getHeight()+2);

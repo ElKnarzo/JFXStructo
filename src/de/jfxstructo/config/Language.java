@@ -9,7 +9,6 @@ public class Language extends Config {
 	private Locale locale;
 
 	public Language() {
-		super(Language.class.getSimpleName().toLowerCase());
 		locale = new Locale("en", "EN");
 	}
 

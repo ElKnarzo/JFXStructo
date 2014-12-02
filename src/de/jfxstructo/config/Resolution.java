@@ -1,5 +1,9 @@
 package de.jfxstructo.config;
 
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import org.jdom2.Element;
 
 public class Resolution extends Config {
@@ -7,9 +11,26 @@ public class Resolution extends Config {
 	private double width, height;
 
 	public Resolution() {
-		super(Resolution.class.getSimpleName().toLowerCase());
 		width = 1280;
 		height = 720;
+
+
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+
+		double minWidth = 0, minHeight = 0;
+
+		for (DisplayMode dm : gd.getDisplayModes()) {
+			System.out.println(dm.getHeight() + " " + dm.getWidth());
+			if(minHeight == 0 && minWidth == 0) {
+				minWidth = dm.getWidth();
+				minHeight = dm.getHeight();
+			}
+			minHeight = Math.min(minHeight, dm.getHeight());
+			minWidth = Math.min(minWidth, dm.getWidth());
+ 		}
+		width = minWidth;
+		height = minHeight;
+
 	}
 
 	public Resolution(Element el) {

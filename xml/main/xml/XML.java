@@ -72,7 +72,7 @@ public class XML {
 
 			return builder.build(is);
 		} catch (JDOMException e) {
-			LoggerFactory.getLogger(XML.class).error(null, e);
+			LoggerFactory.getLogger(XML.class).error(e.getClass().getSimpleName(), e);
 			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), e.getLocalizedMessage(), e.getClass().getSimpleName(), null, e);
 
 		} catch (SAXException e) {
@@ -80,7 +80,6 @@ public class XML {
 		} catch (URISyntaxException e) {
 //			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
