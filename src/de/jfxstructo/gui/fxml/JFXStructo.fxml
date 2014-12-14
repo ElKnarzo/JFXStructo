@@ -66,7 +66,7 @@
                 </ImageView>
               </graphic>
             </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="%Menu.menuFileClose.text">
+                  <MenuItem fx:id="menuCloseFile" mnemonicParsing="false" text="%Menu.menuFileClose.text">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
@@ -81,7 +81,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="%Editor.popupEdit.text">
           <items>
-            <MenuItem mnemonicParsing="false" text="%Menu.menuEditUndo.text">
+            <MenuItem fx:id="menuUndo" disable="true" mnemonicParsing="false" text="%Menu.menuEditUndo.text">
               <accelerator>
                 <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
               </accelerator>
@@ -93,7 +93,7 @@
                 </ImageView>
               </graphic>
             </MenuItem>
-            <MenuItem mnemonicParsing="false" text="%Menu.menuEditRedo.text">
+            <MenuItem fx:id="menuRedo" disable="true" mnemonicParsing="false" text="%Menu.menuEditRedo.text">
               <accelerator>
                 <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
               </accelerator>
@@ -106,7 +106,7 @@
               </graphic>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="%Menu.menuEditCut.text">
+            <MenuItem fx:id="menuCut" disable="true" mnemonicParsing="false" text="%Menu.menuEditCut.text">
               <accelerator>
                 <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
               </accelerator>
@@ -118,7 +118,7 @@
                 </ImageView>
               </graphic>
             </MenuItem>
-            <MenuItem mnemonicParsing="false" text="%Menu.menuEditCopy.text">
+            <MenuItem fx:id="menuCopy" disable="true" mnemonicParsing="false" text="%Menu.menuEditCopy.text">
               <accelerator>
                 <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
               </accelerator>
@@ -130,7 +130,7 @@
                 </ImageView>
               </graphic>
             </MenuItem>
-            <MenuItem mnemonicParsing="false" text="%Menu.menuEditPaste.text">
+            <MenuItem fx:id="menuPaste" disable="true" mnemonicParsing="false" text="%Menu.menuEditPaste.text">
               <accelerator>
                 <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
               </accelerator>
@@ -380,7 +380,7 @@
         </ToolBar>
       </top>
          <center>
-            <TabPane fx:id="diagramPane" BorderPane.alignment="CENTER" />
+            <TabPane fx:id="editorPane" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">

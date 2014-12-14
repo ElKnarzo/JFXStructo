@@ -5,29 +5,29 @@ import java.util.Vector;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class Subqueue extends Element {
+public class Subqueue extends AElement {
 
 	private static String placeholder = "\u2205";
-	private Vector<Element> queue = new Vector<>();
+	private Vector<AElement> queue = new Vector<>();
 
 	public Subqueue() {
 		super(placeholder);
 	}
 
-	public int getIndexOf(Element ele) {
+	public int getIndexOf(AElement ele) {
 		return queue.indexOf(ele);
 	}
 	
-	public Element getElement(int index) {
+	public AElement getElement(int index) {
 		return queue.get(index);
 	}
 
-	public void addElement(Element ele) {
+	public void addElement(AElement ele) {
 		ele.setParent(this);
 		queue.add(ele);
 	}
 
-	public void removeElement(Element ele) {
+	public void removeElement(AElement ele) {
 		queue.remove(ele);
 	}
 
@@ -36,10 +36,10 @@ public class Subqueue extends Element {
 	}
 
 	@Override
-	public Element clone() {
-		Element ele = new Subqueue();
+	public AElement clone() {
+		AElement ele = new Subqueue();
 		for (int i = 0; i < queue.size(); i++) {
-			((Subqueue) ele).addElement(((Element) queue.get(i)).clone());
+			((Subqueue) ele).addElement(((AElement) queue.get(i)).clone());
 		}
 		return ele;
 	}
@@ -55,7 +55,7 @@ public class Subqueue extends Element {
 
 		if (queue.size() > 0) {
 			for(int i = 0; i < queue.size(); i++) {
-				subrect = ((Element) queue.get(i)).prepareDraw(board);
+				subrect = ((AElement) queue.get(i)).prepareDraw(board);
 				frame.setRight(Math.max(frame.getRight(), subrect.getRight()));
 				frame.setBottom(frame.getBottom() + subrect.getBottom());
 			}
@@ -107,11 +107,11 @@ public class Subqueue extends Element {
 	}
 	
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element res = super.selectElementByCoord(x, y);
-		Element sel = null;
+	public AElement selectElementByCoord(double x, double y) {
+		AElement res = super.selectElementByCoord(x, y);
+		AElement sel = null;
 		for (int i = 0; i < queue.size(); i++) {
-			sel = ((Element) queue.get(i)).selectElementByCoord(x, y);
+			sel = ((AElement) queue.get(i)).selectElementByCoord(x, y);
 			if (sel != null) {
 				res = sel;
 			}

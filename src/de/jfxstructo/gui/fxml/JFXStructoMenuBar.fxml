@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
+
+<fx:root id="menuBar" type="MenuBar" useSystemMenuBar="true" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <menus>
+      <Menu mnemonicParsing="false" text="%Menu.menuFile.text">
+         <items>
+            <MenuItem fx:id="menuNewFile" mnemonicParsing="false" text="%Menu.menuFileNew.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/001_New.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuSaveFile" mnemonicParsing="false" text="%Menu.menuFileSave.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/003_Save.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuSaveFileAs" mnemonicParsing="false" text="%Menu.menuFileSaveAs.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/003_Save.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuOpenFile" mnemonicParsing="false" text="%Menu.menuFileOpen.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/002_Open.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuCloseFile" mnemonicParsing="false" text="%Menu.menuFileClose.text">
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuQuit" mnemonicParsing="true" text="%Menu.menuFileQuit.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+            </MenuItem>
+         </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="%Editor.popupEdit.text">
+         <items>
+            <MenuItem fx:id="menuUndo" disable="true" mnemonicParsing="false" text="%Menu.menuEditUndo.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/039_undo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuRedo" disable="true" mnemonicParsing="false" text="%Menu.menuEditRedo.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/038_redo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuCut" disable="true" mnemonicParsing="false" text="%Menu.menuEditCut.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/044_cut.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuCopy" disable="true" mnemonicParsing="false" text="%Menu.menuEditCopy.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/042_copy.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuPaste" disable="true" mnemonicParsing="false" text="%Menu.menuEditPaste.text">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+               </accelerator>
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/043_paste.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+         </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="%Menu.menuDiagram.text">
+         <items>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuMoveUp" disable="true" mnemonicParsing="false" text="%Editor.popupMoveUp.text">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/019_Up.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem fx:id="menuMoveDown" disable="true" mnemonicParsing="false" text="%Editor.popupMoveDown.text">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/020_Down.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+         </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="%Menu.menuPreferences.text">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#onMenuStructureClick" text="%Menu.menuPreferencesOptions.text">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/022_program.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <Menu fx:id="menuLanguage" mnemonicParsing="false" text="%Menu.menuPreferencesLanguage.text">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/081_pen.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <items>
+                  <RadioMenuItem fx:id="menuLangEN" mnemonicParsing="false" onAction="#onMenuLangClick" text="%Menu.menuPreferencesLanguageEnglish.text">
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/046_uk.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </RadioMenuItem>
+                  <RadioMenuItem fx:id="menuLangDE" mnemonicParsing="false" onAction="#onMenuLangClick" text="%Menu.menuPreferencesLanguageGerman.text">
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/080_de.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </RadioMenuItem>
+                  <RadioMenuItem fx:id="menuLangES" mnemonicParsing="false" onAction="#onMenuLangClick" text="%Menu.menuPreferencesLanguageSpanish.text">
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/084_es.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </RadioMenuItem>
+                  <RadioMenuItem fx:id="menuLangRU" mnemonicParsing="false" onAction="#onMenuLangClick" text="%Menu.menuPreferencesLanguageRussia.text">
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/092_ru.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </RadioMenuItem>
+               </items>
+            </Menu>
+         </items>
+      </Menu>
+      <Menu fx:id="plugins" mnemonicParsing="false" text="Plugins">
+         <items>
+            <MenuItem fx:id="test" mnemonicParsing="false" text="Unspecified Action" />
+         </items>
+      </Menu>
+   </menus>
+</fx:root>

@@ -3,7 +3,7 @@ package de.jfxstructo.elements;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class Forever extends Element {
+public class Forever extends AElement {
 
 	private Subqueue q = new Subqueue();
 	private Frame qFrame = new Frame();
@@ -19,8 +19,8 @@ public class Forever extends Element {
 	}
 
 	@Override
-	public Element clone() {
-		Element ele = new Forever();
+	public AElement clone() {
+		AElement ele = new Forever();
 		((Forever) ele).setQueue((Subqueue) this.q.clone());
 		((Forever) ele).q.parent = ele;
 		return ele;
@@ -71,9 +71,9 @@ public class Forever extends Element {
 	}
 	
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element selMe = super.selectElementByCoord(x,y);
-		Element sel = q.selectElementByCoord(x,y);
+	public AElement selectElementByCoord(double x, double y) {
+		AElement selMe = super.selectElementByCoord(x,y);
+		AElement sel = q.selectElementByCoord(x,y);
 		if(sel!=null) {
 			selected=false;
 			selMe = sel;

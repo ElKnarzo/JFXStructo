@@ -1,68 +1,80 @@
 package de.jfxstructo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialogs;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.jfxstructo.elements.Element;
+import de.jfxstructo.elements.AElement;
 import de.jfxstructo.elements.Root;
 import de.jfxstructo.elements.Subqueue;
 import de.jfxstructo.graphics.Frame;
+import de.jfxstructo.gui.JFXStructo;
+import de.jfxstructo.gui.listener.SelectionListener;
 
-public class Diagram {
+public class Diagram extends Canvas {
 
-	private Stack<Element> redo = new Stack<Element>();
-	private Stack<Element> undo = new Stack<Element>();
+	private final List<SelectionListener> listeners = new ArrayList<>();
+	private ContextMenu cm;
+
+	private Stack<AElement> redo = new Stack<AElement>();
+	private Stack<AElement> undo = new Stack<AElement>();
 
 	private static boolean isCut = false;
 
-	private Element root = new Root();
-	private Element selected;
-	private static Element copied = null;
+	private AElement root = new Root();
+	private AElement selected;
+	private static AElement copied = null;
 
-	private final Pane pane;
+    private final Board board = new Board(this.getGraphicsContext2D());
 
-	private final Canvas canvas = new Canvas();
-    private final Board board = new Board(canvas.getGraphicsContext2D());
+    public Diagram() {
+    	parentProperty().addListener(parentListener);
+    	setOnKeyPressed(keyEvent);
+		addEventHandler(MouseEvent.MOUSE_CLICKED, clickEvent);
+		addEventHandler(MouseEvent.MOUSE_CLICKED, openContextMenuEvent);
 
-    public Diagram(Pane pane)  {
-    	this.pane = pane;
-
-    	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				LoggerFactory.getLogger(Diagram.class).info("Key Pressed: " + event.getCode());
-				if(event.getCode() == KeyCode.DELETE && selected != null) {
-					removeElement();
-				}
-			}
-		});
     	repaint();
     }
 
-	public Canvas getCanvas() {
-		return canvas;
-	}
+    public void addSelectionListener(SelectionListener listener) {
+    	listeners.add(listener);
+    }
 
-	public Element getSelectedElement() {
+    public void setContextMenu(ContextMenu cm) {
+    	this.cm = cm;
+    }
+
+    private void showContextMenu(double x, double y) {
+    	cm.show(this, x, y);
+    }
+
+	public AElement getSelectedElement() {
 		return selected;
 	}
 
-	public Element getRoot() {
+	public AElement getRoot() {
 		return root;
 	}
 
 	public void selectElement(double x, double y) {
-		if(x <= canvas.getWidth() && y <= canvas.getHeight()) {
+		if(x <= this.getWidth() && y <= this.getHeight()) {
 			Logger logger = LoggerFactory.getLogger(Diagram.class);
 
 			logger.info("X:"+x + ", Y:" + y);
@@ -79,11 +91,8 @@ public class Diagram {
 			LoggerFactory.getLogger(Diagram.class).debug(f.toString());
 //			int d = Math.max(f.getWidth(), f.getHeight());
 
-	    	canvas.setWidth(f.getWidth()+2);
-			canvas.setHeight(f.getHeight()+2);
-
-			this.pane.setPrefHeight(f.getHeight()+2);
-			this.pane.setPrefWidth(f.getWidth()+2);
+	    	this.setWidth(f.getWidth()+2);
+			this.setHeight(f.getHeight()+2);
 
 			root.draw(board, f);
 		}
@@ -187,5 +196,61 @@ public class Diagram {
 			repaint();
 		}
 	}
+
+	private void notifyListener() {
+		for (SelectionListener selectionListener : listeners) {
+			selectionListener.selectionChanged(selected);
+		}
+	}
+
+	private final ChangeListener<Parent> parentListener = new ChangeListener<Parent>() {
+
+		@Override
+		public void changed(ObservableValue<? extends Parent> observable, Parent oldValue, Parent newValue) {
+			if(oldValue == null && newValue != null) {
+				Region region = (Region) newValue;
+				region.prefHeightProperty().bind(heightProperty());
+				region.prefWidthProperty().bind(widthProperty());
+			}
+		}
+	};
+
+	private final EventHandler<KeyEvent> keyEvent = new EventHandler<KeyEvent>() {
+
+		@Override
+		public void handle(KeyEvent event) {
+			LoggerFactory.getLogger(Diagram.class).info("Key Pressed: " + event.getCode());
+			if ((event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.BACK_SPACE)
+					&& getSelectedElement() != null) {
+				removeElement();
+
+				notifyListener();
+			}
+		}
+	};
+
+	private final EventHandler<MouseEvent> clickEvent = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+
+			if(e.getClickCount() == 2) {
+				Dialogs.showInformationDialog(JFXStructo.getPrimaryStage(), "Double klick");
+			}
+
+			selectElement(e.getX(), e.getY());
+			requestFocus();
+
+			notifyListener();
+		}
+	};
+
+	private final EventHandler<MouseEvent> openContextMenuEvent = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			if (e.getButton() == MouseButton.SECONDARY) {
+				showContextMenu(e.getScreenX(), e.getScreenY());
+			}
+		}
+	};
 
 }

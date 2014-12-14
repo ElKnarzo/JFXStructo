@@ -3,7 +3,7 @@ package de.jfxstructo.elements;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class If extends Element {
+public class If extends AElement {
 
 	private Subqueue qFalse = new Subqueue();
 	private Subqueue qTrue = new Subqueue();
@@ -17,7 +17,7 @@ public class If extends Element {
 		qTrue.setParent(this);
 	}
 
-	public Element getFalse() {
+	public AElement getFalse() {
 		return qFalse;
 	}
 	
@@ -27,17 +27,17 @@ public class If extends Element {
 		qTrue.setParent(this);
 	}
 	
-	public void addElementToTrue(Element ele) {
+	public void addElementToTrue(AElement ele) {
 		qTrue.addElement(ele);
 	}
 	
-	public void addElementToFalse(Element ele) {
+	public void addElementToFalse(AElement ele) {
 		qFalse.addElement(ele);
 	}
 
 	@Override
-	public Element clone() {
-		Element ele = new If(text.getText());
+	public AElement clone() {
+		AElement ele = new If(text.getText());
 		((If) ele).qTrue = (Subqueue) this.qTrue.clone();
 		((If) ele).qFalse = (Subqueue) this.qFalse.clone();
 		((If) ele).qTrue.parent = ele;
@@ -50,7 +50,7 @@ public class If extends Element {
 		frame.setTop(0);
 		frame.setLeft(0);
 				
-		frame.setRight((int) Math.round((Element.E_PADDING) + board.getTextWidth(text.getText()) * 2));
+		frame.setRight((int) Math.round((AElement.E_PADDING) + board.getTextWidth(text.getText()) * 2));
 		
 		// prepare the sub-queues
 		falseFrame = qFalse.prepareDraw(board);
@@ -164,10 +164,10 @@ public class If extends Element {
 	}
 
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element selMe = super.selectElementByCoord(x, y);
-		Element selT = qTrue.selectElementByCoord(x, y);
-		Element selF = qFalse.selectElementByCoord(x, y);
+	public AElement selectElementByCoord(double x, double y) {
+		AElement selMe = super.selectElementByCoord(x, y);
+		AElement selT = qTrue.selectElementByCoord(x, y);
+		AElement selF = qFalse.selectElementByCoord(x, y);
 		if (selT != null) {
 			selMe = selT;
 		} else if (selF != null) {

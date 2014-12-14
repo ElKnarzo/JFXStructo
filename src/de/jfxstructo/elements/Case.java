@@ -5,7 +5,7 @@ import java.util.Vector;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class Case extends Element {
+public class Case extends AElement {
 
 	private Vector<String> cases = new Vector<>();
 	private Vector<Subqueue> qs = new Vector<>();
@@ -46,8 +46,8 @@ public class Case extends Element {
 	}
 
 	@Override
-	public Element clone()  { // Problem here???
-		Element ele = new Case(text.getText(), hasElse);
+	public AElement clone()  { // Problem here???
+		AElement ele = new Case(text.getText(), hasElse);
 		for (int i = 0; i < qs.size(); i++) {
 			Subqueue q = (Subqueue) qs.get(i).clone();
 			((Case) ele).add(cases.get(i), q);
@@ -222,12 +222,12 @@ public class Case extends Element {
 	}
 	
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element selMe = super.selectElementByCoord(x, y);
-		Element selCh = null;
+	public AElement selectElementByCoord(double x, double y) {
+		AElement selMe = super.selectElementByCoord(x, y);
+		AElement selCh = null;
 
 		for (int i = 0; i < qs.size(); i++) {
-			Element pre = ((Subqueue) qs.get(i)).selectElementByCoord(x, y);
+			AElement pre = ((Subqueue) qs.get(i)).selectElementByCoord(x, y);
 			if (pre != null) {
 				selCh = pre;
 			}

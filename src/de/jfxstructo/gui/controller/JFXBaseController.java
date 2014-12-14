@@ -1,24 +1,22 @@
 package de.jfxstructo.gui.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialogs;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import org.slf4j.LoggerFactory;
 
 import de.jfxstructo.Globals;
 import de.jfxstructo.Styler;
-import de.jfxstructo.config.Configuration;
-import de.jfxstructo.config.Resolution;
 import de.jfxstructo.gui.JFXStructo;
 
 public abstract class JFXBaseController implements Initializable {
@@ -26,7 +24,6 @@ public abstract class JFXBaseController implements Initializable {
 	protected URL location;
 	protected ResourceBundle resources;
 
-	private static Resolution res = (Resolution) Configuration.getConfig("resolution");
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -41,13 +38,13 @@ public abstract class JFXBaseController implements Initializable {
 		}
 	}
 
-	public static void initStage(final Stage stage, String systemPath, JFXBaseController controller, boolean isPrimary) {
+	public void initStage(final Stage stage, String systemPath) {
 
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setResources(Globals.getResourceBundle());
 			loader.setLocation(JFXBaseController.class.getResource(systemPath));
-			loader.setController(controller);
+			loader.setController(this);
 			loader.setBuilderFactory(new JavaFXBuilderFactory());
 
 			Parent p = (Parent) loader.load();
@@ -55,24 +52,12 @@ public abstract class JFXBaseController implements Initializable {
 
 			Styler.loadStyle(stage);
 
-			if (isPrimary) {
-				stage.setHeight(res.getHeight());
-				stage.setWidth(res.getWidth());
-
-				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-					@Override
-					public void handle(WindowEvent arg0) {
-						res.setDimension(stage.getWidth(), stage.getHeight());
-						Configuration.saveConfig();
-						System.exit(0);
-					}
-				});
-
-			}
-
-		} catch (Exception ex) {
+		} catch (LoadException ex) {
 			LoggerFactory.getLogger(JFXBaseController.class).error(null, ex);
-			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), null, null, null, ex);
+			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), "Can't load Scene", null, null, ex);
+		} catch (IOException e) {
+			LoggerFactory.getLogger(JFXBaseController.class).error(null, e);
+//			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), "Can't load Scene", null, null, e);
 		}
 	}
 

@@ -5,7 +5,7 @@ import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
 
-public class Root extends Element {
+public class Root extends AElement {
 
 	private Subqueue queue = new Subqueue();
 		
@@ -36,7 +36,7 @@ public class Root extends Element {
 		queue.setParent(this);
 	}
 	
-	public void removeElement(Element ele) {
+	public void removeElement(AElement ele) {
 		if (ele != null) {
 			ele.selected = false;
 			if (!ele.getClass().getSimpleName().equals("Subqueue")
@@ -62,7 +62,7 @@ public class Root extends Element {
 		subFrame = queue.prepareDraw(board);
 		
 //		if (isNice == true) {
-			frame.setRight(Math.max(frame.getRight(), subFrame.getRight() + 2 * Element.E_PADDING));
+			frame.setRight(Math.max(frame.getRight(), subFrame.getRight() + 2 * AElement.E_PADDING));
 //		} else {
 //			rect.setRight(Math.max(rect.getRight(), subrect.getRight()));
 //		}
@@ -99,16 +99,16 @@ public class Root extends Element {
 	}
 
 	@Override
-	public Element clone() {
+	public AElement clone() {
 		Root ele = new Root(text.getText());
 		ele.setQueue((Subqueue) this.queue.clone());
 		return ele;
 	}
 	
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element selMe = super.selectElementByCoord(x, y);
-		Element selCh = queue.selectElementByCoord(x, y);
+	public AElement selectElementByCoord(double x, double y) {
+		AElement selMe = super.selectElementByCoord(x, y);
+		AElement selCh = queue.selectElementByCoord(x, y);
 		
 		if (selCh != null) {
 			return selCh;

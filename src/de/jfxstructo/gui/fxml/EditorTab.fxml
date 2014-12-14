@@ -4,12 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="root" type="Tab" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <ScrollPane prefWidth="-1.0">
          <content>
-            <AnchorPane id="Content" fx:id="pane" minHeight="-1.0" minWidth="-1.0" prefWidth="-1.0" />
+            <AnchorPane id="Content" fx:id="diagramPane" minHeight="-1.0" minWidth="-1.0" prefWidth="-1.0" />
          </content>
       </ScrollPane>
    </content>
-</Tab>
+</fx:root>

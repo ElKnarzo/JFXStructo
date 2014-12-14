@@ -3,7 +3,7 @@ package de.jfxstructo.elements;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class Instruction extends Element {
+public class Instruction extends AElement {
 
 	
 	
@@ -22,7 +22,7 @@ public class Instruction extends Element {
 		frame.setRight(0);
 		frame.setBottom(0);
 				
-		frame.setRight(Math.round(2*(Element.E_PADDING/2)));
+		frame.setRight(Math.round(2*(AElement.E_PADDING/2)));
 		if(frame.getRight() < board.getTextWidth(text.getText()) + E_PADDING) {
 			frame.setRight((int) (board.getTextWidth(text.getText()) + E_PADDING));
 		}
@@ -49,7 +49,7 @@ public class Instruction extends Element {
 	}
 
 	@Override
-	public Element clone() {
+	public AElement clone() {
 		Instruction ele = new Instruction(text.getText());
 		return ele;
 	}

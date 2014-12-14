@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root focusTraversable="false" orientation="HORIZONTAL" pickOnBounds="false" type="ToolBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <items>
+      <HBox prefHeight="-1.0" prefWidth="-1.0">
+         <children>
+            <Button fx:id="btnNewFile" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="25.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" smooth="true">
+                     <image>
+                        <Image url="@../icons/001_New.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnNew.tooltip" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnOpenFile" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" smooth="true">
+                     <image>
+                        <Image url="@../icons/002_Open.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnOpen.tooltip" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnSaveFile" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" smooth="true">
+                     <image>
+                        <Image url="@../icons/003_Save.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnOpen.tooltip" />
+               </tooltip>
+            </Button>
+         </children>
+         <padding>
+            <Insets fx:id="x1" />
+         </padding>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="-1.0" prefWidth="14.0" />
+      <HBox fx:id="btnPrint" padding="$x1" prefHeight="-1.0" prefWidth="-1.0">
+         <children>
+            <Button minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/041_print.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnPrint.tooltip" />
+               </tooltip>
+            </Button>
+         </children>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="-1.0" prefWidth="14.0" />
+      <HBox padding="$x1" prefHeight="-1.0" prefWidth="-1.0">
+         <children>
+            <Button fx:id="btnUndo" disable="true" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/039_undo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnUndo.tooltip" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnRedo" disable="true" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/038_redo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnRedo.tooltip" />
+               </tooltip>
+            </Button>
+         </children>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="-1.0" prefWidth="14.0" />
+      <HBox padding="$x1" prefHeight="-1.0" prefWidth="-1.0">
+         <children>
+            <Button id="btnNew" fx:id="btnCut" disable="true" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="25.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/044_cut.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.popupCut.text" />
+               </tooltip>
+            </Button>
+            <Button id="btnOpen" fx:id="btnCopy" disable="true" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" smooth="true">
+                     <image>
+                        <Image url="@../icons/042_copy.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.popupCopy.text" />
+               </tooltip>
+            </Button>
+            <Button id="btnSave" fx:id="btnPaste" disable="true" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" style="" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" smooth="true">
+                     <image>
+                        <Image url="@../icons/043_paste.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.popupPaste.text" />
+               </tooltip>
+            </Button>
+         </children>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="-1.0" prefWidth="14.0" />
+      <HBox>
+         <children>
+            <Button fx:id="btnMoveUp" disable="true" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/019_Up.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnMoveUp.tooltip" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnMoveDown" disable="true" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/020_Down.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Editor.btnMoveUp.tooltip" />
+               </tooltip>
+            </Button>
+         </children>
+      </HBox>
+      <Separator orientation="VERTICAL" prefHeight="-1.0" prefWidth="14.0" />
+      <HBox prefHeight="-1.0" prefWidth="-1.0">
+         <children>
+            <Button minWidth="20.0" mnemonicParsing="false" prefWidth="30.0" text="">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/052_update.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="%Menu.menuHelpUpdate.text" />
+               </tooltip>
+            </Button>
+         </children>
+      </HBox>
+   </items>
+</fx:root>

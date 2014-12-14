@@ -16,26 +16,25 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+
+import org.slf4j.LoggerFactory;
 
 import com.aquafx_project.controls.skin.styles.ButtonType;
 
@@ -47,14 +46,16 @@ import de.jfxstructo.Styler;
 import de.jfxstructo.config.Configuration;
 import de.jfxstructo.config.Language;
 import de.jfxstructo.config.Resolution;
+import de.jfxstructo.elements.AElement;
 import de.jfxstructo.gui.JFXStructo;
 import de.jfxstructo.gui.listener.DiagramMouseMoveListener;
+import de.jfxstructo.gui.listener.SelectionListener;
 import de.jfxstructo.plugin.interfaces.Pluggable;
 import de.jfxstructo.plugin.interfaces.PluginManager;
 import de.jfxstructo.plugin.loader.PluginLoader;
 import de.jfxstructo.plugin.loader.PluginManagerImpl;
 
-public class MainController extends JFXBaseController {
+public class MainController extends JFXBaseController implements SelectionListener {
 
 	// Configs
 	private Language lang;
@@ -64,24 +65,20 @@ public class MainController extends JFXBaseController {
 	private final HashMap<Tab, Diagram> diagrams = new HashMap<>();
 
 	@FXML
-	private VBox root;
-	@FXML
 	private MenuBar menuBar;
 	@FXML
 	private Menu menuLanguage;
 	@FXML
-	private MenuItem menuNewFile, menuSaveFile, menuSaveFileAs, menuOpenFile, menuCloseFile, menuQuit, test;
+	private MenuItem menuNewFile, menuSaveFile, menuSaveFileAs, menuOpenFile, menuCloseFile, test;
+	@FXML
+	private MenuItem menuUndo, menuRedo, menuCut, menuCopy, menuPaste, menuQuit;
 	@FXML
 	private Button btnNew, btnOpen, btnSave, btnUndo, btnRedo, btnCut, btnCopy, btnPaste, btnRemove;
 	@FXML
 	private Menu plugins;
 
 	@FXML
-	private ScrollPane scroll;
-	@FXML
-	private Pane pane;
-	@FXML
-	private TabPane diagramPane;
+	private TabPane editorPane;
 	@FXML
 	private Label leftStatus;
 
@@ -122,16 +119,11 @@ public class MainController extends JFXBaseController {
 		newFile();
 		// ####################################################################
 
-		diagramPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+		editorPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
 			@Override
 			public void changed(ObservableValue<? extends Tab> obversableValue, Tab oldTab, Tab newTab) {
 				selectedDiagram = diagrams.get(newTab);
 
-				if(oldTab != null && newTab == null) {
-//					createNewDiagram();
-				}
-
-				System.out.println("old:"+oldTab+" new:"+newTab);
 				updateCopyCutPaste();
 				updateRedoUndo();
 			}
@@ -139,102 +131,42 @@ public class MainController extends JFXBaseController {
 
 		// ####################################################################
 		// --------------------------------------------------------------------
-		menuNewFile.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				newFile();
-			}
-		});
+		menuNewFile.setOnAction(newFileEvent);
+		menuOpenFile.setOnAction(openFileEvent);
+		menuQuit.setOnAction(closeEvent);
+		// --------------------------------------------------------------------
 
-		menuOpenFile.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				openFile();
-			}
-		});
+		// --------------------------------------------------------------------
+		menuUndo.setOnAction(undoEvent);
+		menuRedo.setOnAction(redoEvent);
+		// --------------------------------------------------------------------
 
-		menuQuit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				close();
-			}
-		});
-
-
+		// --------------------------------------------------------------------
+		menuCut.setOnAction(cutEvent);
+		menuCopy.setOnAction(copyEvent);
+		menuPaste.setOnAction(pasteEvent);
 		// --------------------------------------------------------------------
 		// ####################################################################
 
 		// ####################################################################
 		// --------------------------------------------------------------------
-		btnNew.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				newFile();
-			}
-		});
+		btnNew.setOnAction(newFileEvent);
+		btnOpen.setOnAction(openFileEvent);
 		// --------------------------------------------------------------------
 
 		// --------------------------------------------------------------------
-		btnRedo.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.redo();
-
-				updateRedoUndo();
-			}
-		});
-
-		btnUndo.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.undo();
-
-				updateRedoUndo();
-			}
-		});
+		btnRedo.setOnAction(redoEvent);
+		btnUndo.setOnAction(undoEvent);
 		// --------------------------------------------------------------------
 
 		// --------------------------------------------------------------------
-		btnCut.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.cut();
-
-				updateCopyCutPaste();
-				updateRedoUndo();
-			}
-		});
-
-		btnCopy.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.copy();
-
-				btnPaste.setDisable(!selectedDiagram.canPaste());
-			}
-		});
-
-		btnPaste.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.paste();
-
-				updateCopyCutPaste();
-				updateRedoUndo();
-			}
-		});
+		btnCut.setOnAction(cutEvent);
+		btnCopy.setOnAction(copyEvent);
+		btnPaste.setOnAction(pasteEvent);
 		// --------------------------------------------------------------------
 		// ####################################################################
 
-		btnRemove.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				selectedDiagram.removeElement();
-
-				updateCopyCutPaste();
-				updateRedoUndo();
-			}
-		});
+		btnRemove.setOnAction(removeEvent);
 
 
 		test.setOnAction(new EventHandler<ActionEvent>() {
@@ -249,7 +181,7 @@ public class MainController extends JFXBaseController {
 					for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 						Pluggable p = plugins.get(iterator.next());
 						p.setPluginManager(manager);
-						p.setStage((Stage) root.getScene().getWindow());
+						p.setStage(JFXStructo.getPrimaryStage());
 					}
 					for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 						Pluggable p = plugins.get(iterator.next());
@@ -270,65 +202,56 @@ public class MainController extends JFXBaseController {
 		btnCut.setDisable(!selectedDiagram.canCopyCut());
 		btnCopy.setDisable(!selectedDiagram.canCopyCut());
 		btnPaste.setDisable(!selectedDiagram.canPaste());
+
+		menuCut.setDisable(!selectedDiagram.canCopyCut());
+		menuCopy.setDisable(!selectedDiagram.canCopyCut());
+		menuPaste.setDisable(!selectedDiagram.canPaste());
 	}
 
 	private void updateRedoUndo() {
 		btnRedo.setDisable(!selectedDiagram.canRedo());
 		btnUndo.setDisable(!selectedDiagram.canUndo());
+
+		menuRedo.setDisable(!selectedDiagram.canRedo());
+		menuUndo.setDisable(!selectedDiagram.canUndo());
 	}
 
 	private void newFile() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/de/jfxstructo/gui/fxml/newTab.fxml"));
-			loader.setBuilderFactory(new JavaFXBuilderFactory());
 
-			final Tab tab = loader.load();
+		final EditorPaneTab tab = new EditorPaneTab();
+		tab.getDiagram().addSelectionListener(this);
 
-			tab.setText("Diagram"+(diagrams.size()+1));
-			ScrollPane scroll = (ScrollPane) tab.getContent();
-			AnchorPane anchor = (AnchorPane) scroll.getContent();
+		ContextMenu cm = new ContextMenu(new SeparatorMenuItem(),menuCut,menuCopy,menuPaste);
+		tab.getDiagram().setContextMenu(cm);
 
-			final Diagram diagram = new Diagram(anchor);
-			anchor.getChildren().add(diagram.getCanvas());
+		tab.setText("Diagram" + (diagrams.size() + 1));
 
-			diagrams.put(tab, diagram);
-			selectedDiagram = diagram;
+		diagrams.put(tab, tab.getDiagram());
+		selectedDiagram = tab.getDiagram();
 
-			diagramPane.getTabs().add(tab);
-			diagramPane.getSelectionModel().select(tab);
+		editorPane.getTabs().add(tab);
+		editorPane.getSelectionModel().select(tab);
 
-			diagram.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, new DiagramMouseMoveListener(leftStatus));
-			diagram.getCanvas().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent e) {
-					diagram.selectElement(e.getX(), e.getY());
-					diagram.getCanvas().requestFocus();
-					updateCopyCutPaste();
-				}
-			});
+		tab.getDiagram().addEventHandler(MouseEvent.MOUSE_MOVED, new DiagramMouseMoveListener(leftStatus));
 
-			tab.setOnCloseRequest(new EventHandler<Event>() {
-				@Override
-				public void handle(Event arg0) {
-					newFile();
-					diagrams.remove(tab);
-				}
-			});
+		tab.setOnCloseRequest(new EventHandler<Event>() {
+			@Override
+			public void handle(Event arg0) {
+				diagrams.remove(tab);
+				if(diagrams.size() == 0) { newFile(); }
+			}
+		});
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void openFile() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
-		fileChooser.showOpenDialog(root.getScene().getWindow());
+		fileChooser.showOpenDialog(JFXStructo.getPrimaryStage());
 	}
 
 	private void close() {
-		Window window = root.getScene().getWindow();
+		Window window = JFXStructo.getPrimaryStage();
 		res.setDimension(window.getWidth(), window.getHeight());
 
 		Configuration.saveConfig();
@@ -343,7 +266,8 @@ public class MainController extends JFXBaseController {
 	@FXML
 	private void onMenuStructureClick(ActionEvent event) {
 		Stage s = new Stage();
-		PreferenceController.initStage(s, "/de/jfxstructo/gui/fxml/Preferences.fxml", new PreferenceController(), false);
+		PreferenceController preferenceController = new PreferenceController();
+		preferenceController.initStage(s, "/de/jfxstructo/gui/fxml/Preferences.fxml");
 
 		s.setTitle(Globals.getResourceBundle().getString("Menu.menuPreferences.text"));
 		s.initModality(Modality.APPLICATION_MODAL);
@@ -388,8 +312,8 @@ public class MainController extends JFXBaseController {
 		try {
 			Restarter.restartApplication(null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerFactory.getLogger(MainController.class).error(null, e);
+			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), null, null, null, e);
 		}
 
 //		Stage stage = (Stage) root.getScene().getWindow();
@@ -398,26 +322,88 @@ public class MainController extends JFXBaseController {
 
 	}
 
-//	private void drawShapes(GraphicsContext gc) {
-//		gc.setFill(Color.GREEN);
-//      gc.setStroke(Color.BLUE);
-//      gc.setLineWidth(2);
-//      gc.strokeRect(350, 250, 2050, 50);
-//      gc.strokeRect(10, 10, 250, 50);
-//
-//      double[] x = {10,135,260};
-//      double[] y = {10,60,10};
-//      gc.strokePolyline(x, y, 3);
-//
-//      gc.strokeRect(10, 60, 125, 150);
-//      gc.strokeRect(135, 60, 125, 150);
-//
-//      gc.setLineWidth(0.55);
-//      gc.fillText(new Text("True").getText(), 13.22, 56.78);
-//      gc.setTextAlign(TextAlignment.RIGHT);
-//      gc.fillText("False", 256.78, 56.78);
-//      gc.setTextAlign(TextAlignment.CENTER);
-//      gc.fillText("(x <= 4)", 138.22, 40);
-//	}
+	private final EventHandler<ActionEvent> newFileEvent = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent arg0) {
+			newFile();
+		}
+	};
+
+	private final EventHandler<ActionEvent> openFileEvent = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent arg0) {
+			openFile();
+		}
+	};
+
+	private final EventHandler<ActionEvent> closeEvent = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent arg0) {
+			close();
+		}
+	};
+
+	private final EventHandler<ActionEvent> redoEvent = new EventHandler<ActionEvent>(){
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.redo();
+
+			updateRedoUndo();
+		}
+	};
+
+	private final EventHandler<ActionEvent> undoEvent = new EventHandler<ActionEvent>(){
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.undo();
+
+			updateRedoUndo();
+		}
+	};
+
+	private final EventHandler<ActionEvent> cutEvent = new EventHandler<ActionEvent>(){
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.cut();
+
+			updateCopyCutPaste();
+			updateRedoUndo();
+		}
+	};
+
+	private final EventHandler<ActionEvent> copyEvent = new EventHandler<ActionEvent>(){
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.copy();
+
+			btnPaste.setDisable(!selectedDiagram.canPaste());
+		}
+	};
+
+	private final EventHandler<ActionEvent> pasteEvent = new EventHandler<ActionEvent>(){
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.paste();
+
+			updateCopyCutPaste();
+			updateRedoUndo();
+		}
+	};
+
+	private final EventHandler<ActionEvent> removeEvent = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent arg0) {
+			selectedDiagram.removeElement();
+
+			updateCopyCutPaste();
+			updateRedoUndo();
+		}
+	};
+
+
+	@Override
+	public void selectionChanged(AElement selected) {
+		updateCopyCutPaste();
+	}
 
 }

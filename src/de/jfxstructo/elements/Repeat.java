@@ -3,7 +3,7 @@ package de.jfxstructo.elements;
 import de.jfxstructo.Board;
 import de.jfxstructo.graphics.Frame;
 
-public class Repeat extends Element {
+public class Repeat extends AElement {
 
 	private Subqueue q = new Subqueue();
 	private Frame qFrame = new Frame();
@@ -24,8 +24,8 @@ public class Repeat extends Element {
 	}
 
 	@Override
-	public Element clone() {
-		Element ele = new Repeat(text.getText());
+	public AElement clone() {
+		AElement ele = new Repeat(text.getText());
 		Subqueue s = (Subqueue) q.clone();
 		((Repeat) ele).setQueue(s);
 		return ele;
@@ -80,9 +80,9 @@ public class Repeat extends Element {
 	}
 
 	@Override
-	public Element selectElementByCoord(double x, double y) {
-		Element selMe = super.selectElementByCoord(x,y);
-		Element sel = q.selectElementByCoord(x,y);
+	public AElement selectElementByCoord(double x, double y) {
+		AElement selMe = super.selectElementByCoord(x,y);
+		AElement sel = q.selectElementByCoord(x,y);
 		if(sel!=null) {
 			selected=false;
 			selMe = sel;

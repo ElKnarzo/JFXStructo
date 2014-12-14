@@ -5,22 +5,22 @@ import de.jfxstructo.graphics.Frame;
 import de.jfxstructo.interfaces.Drawable;
 
 
-public abstract class Element implements Drawable, Cloneable {
+public abstract class AElement implements Drawable, Cloneable {
 	
 	public static int E_PADDING = 20;
 	
 	protected Text text = new Text();
-	protected Element parent;
+	protected AElement parent;
 	
 	protected int width, height;
 	protected boolean selected = false;
 	
 	protected Frame frame = new Frame();
 	
-	public Element() {
+	public AElement() {
 	}
 	
-	public Element(String text) {
+	public AElement(String text) {
 		this.text.setText(text);
 	}
 	
@@ -32,11 +32,11 @@ public abstract class Element implements Drawable, Cloneable {
 		this.text.setText(text);
 	}
 
-	public Element getParent() {
+	public AElement getParent() {
 		return parent;
 	}
 	
-	public void setParent(Element parent) {
+	public void setParent(AElement parent) {
 		this.parent = parent;
 	}
 	
@@ -57,10 +57,10 @@ public abstract class Element implements Drawable, Cloneable {
 		height = frame.getHeight();
 	}
 
-	public abstract Element clone();
+	public abstract AElement clone();
 	
-	public Element selectElementByCoord(double x, double y) {
-		Element ele = this;
+	public AElement selectElementByCoord(double x, double y) {
+		AElement ele = this;
 		while (ele.parent != null)
 			ele = ele.parent;
 
