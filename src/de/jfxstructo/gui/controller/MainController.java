@@ -27,7 +27,6 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,7 +47,6 @@ import de.jfxstructo.config.Language;
 import de.jfxstructo.config.Resolution;
 import de.jfxstructo.elements.AElement;
 import de.jfxstructo.gui.JFXStructo;
-import de.jfxstructo.gui.listener.DiagramMouseMoveListener;
 import de.jfxstructo.gui.listener.SelectionListener;
 import de.jfxstructo.plugin.interfaces.Pluggable;
 import de.jfxstructo.plugin.interfaces.PluginManager;
@@ -232,7 +230,7 @@ public class MainController extends JFXBaseController implements SelectionListen
 		editorPane.getTabs().add(tab);
 		editorPane.getSelectionModel().select(tab);
 
-		tab.getDiagram().addEventHandler(MouseEvent.MOUSE_MOVED, new DiagramMouseMoveListener(leftStatus));
+//		tab.getDiagram().addEventHandler(MouseEvent.MOUSE_MOVED, new DiagramMouseMoveListener(leftStatus));
 
 		tab.setOnCloseRequest(new EventHandler<Event>() {
 			@Override

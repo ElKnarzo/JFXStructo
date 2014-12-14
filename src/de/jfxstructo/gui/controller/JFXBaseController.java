@@ -1,13 +1,11 @@
 package de.jfxstructo.gui.controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialogs;
@@ -52,12 +50,9 @@ public abstract class JFXBaseController implements Initializable {
 
 			Styler.loadStyle(stage);
 
-		} catch (LoadException ex) {
+		} catch (Exception ex) {
 			LoggerFactory.getLogger(JFXBaseController.class).error(null, ex);
 			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), "Can't load Scene", null, null, ex);
-		} catch (IOException e) {
-			LoggerFactory.getLogger(JFXBaseController.class).error(null, e);
-//			Dialogs.showErrorDialog(JFXStructo.getPrimaryStage(), "Can't load Scene", null, null, e);
 		}
 	}
 

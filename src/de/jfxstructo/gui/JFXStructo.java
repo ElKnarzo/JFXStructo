@@ -3,19 +3,18 @@ package de.jfxstructo.gui;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import de.jfxstructo.Styler;
 import de.jfxstructo.config.Configuration;
 import de.jfxstructo.config.Resolution;
-import de.jfxstructo.gui.controller.MainController;
+import de.jfxstructo.gui.views.JFXStructoView;
 
 public class JFXStructo extends Application {
 
 	private static Stage stage;
 	private static Resolution res = (Resolution) Configuration.getConfig("resolution");
-
-	private final MainController controller = new MainController();
 
 	/**
 	 * @param args
@@ -30,7 +29,6 @@ public class JFXStructo extends Application {
 
 		Configuration.loadConfig();
 
-		controller.initStage(stage, "/de/jfxstructo/gui/fxml/JFXStructo.fxml");
 		stage.setTitle("JFXStructo");
 		stage.centerOnScreen();
 
@@ -39,6 +37,8 @@ public class JFXStructo extends Application {
 		stage.setOnCloseRequest(closeEvent);
 
 		Styler.loadStyle(stage);
+
+		stage.setScene(new Scene(new JFXStructoView()));
 		stage.show();
 	}
 

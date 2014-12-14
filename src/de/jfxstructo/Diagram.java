@@ -18,7 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.jfxstructo.elements.AElement;
@@ -75,13 +74,7 @@ public class Diagram extends Canvas {
 
 	public void selectElement(double x, double y) {
 		if(x <= this.getWidth() && y <= this.getHeight()) {
-			Logger logger = LoggerFactory.getLogger(Diagram.class);
-
-			logger.info("X:"+x + ", Y:" + y);
 			selected = root.selectElementByCoord(x, y);
-			logger.info(selected.toString());
-			logger.info(selected.getFrame().toString());
-			logger.info("Height: "+selected.getHeight()+", Width: "+selected.getWidth());
 			board.drawRect(selected.getFrame(), Color.AQUA);
 		}
 	}
@@ -115,12 +108,82 @@ public class Diagram extends Canvas {
 		}
 	}
 
+	public boolean moveDown(AElement ele) {
+		boolean res = false;
+		if (ele != null) {
+			int i = ((Subqueue) ele.getParent()).getIndexOf(ele);
+			if (!ele.getClass().getSimpleName().equals("Subqueue")
+					&& !ele.getClass().getSimpleName().equals("Root")
+					&& ((i + 1) < ((Subqueue) ele.getParent()).getQueue().size())) {
+				((Subqueue) ele.getParent()).getQueue().removeElementAt(i);
+				((Subqueue) ele.getParent()).getQueue().insertElementAt(ele, i + 1);
+				res = true;
+			}
+		}
+		addUndo();
+		repaint();
+		return res;
+	}
+
+	public boolean moveUp(AElement ele) {
+		boolean res = false;
+		if (ele != null) {
+			int i = ((Subqueue) ele.getParent()).getIndexOf(ele);
+			if (!ele.getClass().getSimpleName().equals("Subqueue")
+					&& !ele.getClass().getSimpleName().equals("Root")
+					&& ((i - 1 >= 0))) {
+				((Subqueue) ele.getParent()).getQueue().removeElement(i);
+				((Subqueue) ele.getParent()).getQueue().insertElementAt(ele, i - 1);
+				res = true;
+			}
+		}
+		addUndo();
+		repaint();
+		return res;
+	}
+
 	public boolean canUndo() {
 		return (undo.size() > 0);
 	}
 
 	public boolean canRedo() {
 		return (redo.size() > 0);
+	}
+
+	public boolean canMoveUp() {
+		int i = -1;
+		boolean conditionCanMoveUp = false;
+		if(getSelectedElement() != null)
+		{
+			if(getSelectedElement().getParent() != null)
+			{
+				// make shure parent is a subqueue, which is not the case if somebody clicks on a subqueue!
+				if (getSelectedElement().getParent().getClass().getSimpleName().equals("Subqueue"))
+				{
+					i = ((Subqueue) getSelectedElement().getParent()).getIndexOf(getSelectedElement());
+					conditionCanMoveUp = (i - 1 >= 0);
+				}
+			}
+		}
+		return conditionCanMoveUp;
+	}
+
+	public boolean canMoveDown() {
+		int i = -1;
+		boolean conditionCanMoveDown = false;
+		if(getSelectedElement() != null)
+		{
+			if(getSelectedElement().getParent() != null)
+			{
+				// make shure parent is a subqueue, which is not the case if somebody clicks on a subqueue!
+				if (getSelectedElement().getParent().getClass().getSimpleName().equals("Subqueue"))
+				{
+					i = ((Subqueue) getSelectedElement().getParent()).getIndexOf(getSelectedElement());
+					conditionCanMoveDown = (i + 1 < ((Subqueue) getSelectedElement().getParent()).getQueue().size());
+				}
+			}
+		}
+		return conditionCanMoveDown;
 	}
 
 	public void addUndo() {
